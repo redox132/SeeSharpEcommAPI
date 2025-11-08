@@ -104,5 +104,26 @@ namespace MyWebApp.Controllers
             }
             return Ok(new { message = "Product deleted successfully" });
         }
+
+
+        [HttpPatch("{id}")]
+        public IActionResult UpdateStock([FromRoute] int id, Product product)
+        {
+            using (var connection = new SqliteConnection("Data source=Data/db.db"))
+            {
+                connection.Open();
+                var command = connection.CreateCommand();
+                command.CommandText = "UPDATE product set price = $price where id = $id";
+
+                command.Parameters.AddWithValue("$price", product.Price);
+                command.Parameters.AddWithValue("$id", id);
+
+                int affectedRows = command.ExecuteNonQuery();
+
+                return (affectedRows >= 1) ? Ok(new { message = "The product has been Updated" }) : NotFound(new { message = "Product not found" });
+            }
+        }
+
     }
+
 }

@@ -1,0 +1,2 @@
+### get order item for order with ID 1
+GET http://localhost:5089/api/order/1/items

@@ -5,38 +5,41 @@ using Microsoft.Data.Sqlite;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CartController : ControllerBase
+public class OrderController : ControllerBase
 {
     [HttpGet("{id}/items")]
-    public IActionResult GetCartItems([FromRoute] int id)
+    public IActionResult GetOrderItems([FromRoute] int id)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
             connection.Open();
             var command = connection.CreateCommand();
             command.CommandText = @"
-                Select c.id, c.user_id, ci.product_id, ci.quantity
-                From cart c
-                Join cart_item ci On c.id = ci.cart_id
-                Where c.user_id = $id;
-                ";
+            SELECT o.id, o.order_date, oi.product_id, oi.quantity
+            FROM orders o
+            JOIN order_item oi ON o.id = oi.order_id
+            WHERE o.user_id = $id;
+        ";
             command.Parameters.AddWithValue("$id", id);
             var reader = command.ExecuteReader();
             if (!reader.HasRows)
             {
-                return Ok(new { message = $"No cart items found for user with ID {id}" });
+                return Ok(new { message = $"No orders found for user with ID {id}" });
             }
-            var cartItems = new List<object>();
+
+            var orders = new List<object>();
             while (reader.Read())
             {
-                cartItems.Add(new
+                orders.Add(new
                 {
-                    cartId = reader.GetInt32(0),
+                    orderId = reader.GetInt32(0),
+                    orderDate = reader.GetDateTime(1),
                     productId = reader.GetInt32(2),
                     quantity = reader.GetInt32(3)
                 });
             }
-            return Ok(cartItems);
+
+            return Ok(new { message = "OK", orders });
         }
     }
 }
