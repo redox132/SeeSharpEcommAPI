@@ -113,3 +113,6 @@
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/test.genruntimeconfig.cache
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/ref/test.dll
 /Users/rida/rida/wmu/OOP/LatestEcommAPI/obj/Debug/net9.0/test.sourcelink.json
+/Users/rida/rida/wmu/OOP/LatestEcommAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.Swagger.dll
+/Users/rida/rida/wmu/OOP/LatestEcommAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerGen.dll
+/Users/rida/rida/wmu/OOP/LatestEcommAPI/bin/Debug/net9.0/Swashbuckle.AspNetCore.SwaggerUI.dll

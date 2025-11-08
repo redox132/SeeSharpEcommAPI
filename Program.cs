@@ -1,16 +1,36 @@
 using LatestEcommAPI.Database;
+using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add this line to register controller support
+// this adds the controller services to the DI container
 builder.Services.AddControllers();
+
+// Swagger support
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "LatestEcommAPI",
+        Version = "v1"
+    });
+});
 
 var app = builder.Build();
 
-// Maps all controller endpoints (like /api/users)
+// enable Swagger UI
+app.UseSwagger();
+app.UseSwaggerUI(c =>
+{
+    c.SwaggerEndpoint("/swagger/v1/swagger.json", "LatestEcommAPI v1");
+});
+
+// Map all controllers
 app.MapControllers();
 
-// Run your DB migration logic
+// run DB migrations if needed
+
 DbController.Migrate();
 
 app.Run();
