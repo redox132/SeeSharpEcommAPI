@@ -7,12 +7,12 @@ using Microsoft.Data.Sqlite;
 namespace MyWebApp.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/products")]
     public class ProductController : ControllerBase
     {
         [HttpGet]
-        [Authorize]
-        public async Task<IActionResult> GetAllProducts()
+        // [Authorize]
+        public async Task<IActionResult> GetAllProducts([FromHeader] string X_API_KEY, [FromQuery] int size = 15, int page = 1)
         {
             var products = new List<object>();
 
@@ -21,7 +21,10 @@ namespace MyWebApp.Controllers
                 await connection.OpenAsync();
 
                 var command = connection.CreateCommand();
-                command.CommandText = "SELECT Id, Name, Price FROM product";
+                command.CommandText = "SELECT p.* FROM products p INNER JOIN users u ON p.user_id = u.id WHERE u.X_API_KEY = $X_API_KEY LIMIT $size OFFSET $offset";
+                command.Parameters.AddWithValue("$size", size);
+                command.Parameters.AddWithValue("$X_API_KEY", X_API_KEY);
+                command.Parameters.AddWithValue("$page", size * (page - 1));
 
                 using (var reader = await command.ExecuteReaderAsync())
                 {
@@ -41,7 +44,7 @@ namespace MyWebApp.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> GetProduct(int id)
         {
             var products = new List<object>();
@@ -73,7 +76,7 @@ namespace MyWebApp.Controllers
 
 
         [HttpPost]
-        [Authorize]
+        // [Authorize]
         public IActionResult CreateProduct([FromBody] Product product)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -93,7 +96,7 @@ namespace MyWebApp.Controllers
         }
 
         [HttpDelete("{id}")]
-        [Authorize]
+        // [Authorize]
         public async Task<IActionResult> DeleteProduct(int id)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))
@@ -113,7 +116,7 @@ namespace MyWebApp.Controllers
 
 
         [HttpPatch("{id}")]
-        [Authorize]
+        // [Authorize]
         public IActionResult UpdateStock([FromRoute] int id, Product product)
         {
             using (var connection = new SqliteConnection("Data source=Data/db.db"))

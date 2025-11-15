@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using LatestEcommAPI.DTOs.User;
 using Microsoft.AspNetCore.Http.Headers;
 
-
 namespace LatestEcommAPI.Controllers;
 
 [ApiController]
@@ -13,14 +12,14 @@ namespace LatestEcommAPI.Controllers;
 public class UserController : ControllerBase
 {
     [HttpGet("whoami")]
-    public async Task<IActionResult> WhoAmI([FromHeader] string ApiKey)
+    public async Task<IActionResult> WhoAmI([FromHeader] string X_API_KEY)
     {
         using (var connection = new SqliteConnection("Data source=Data/db.db"))
         {
             await connection.OpenAsync();
             var command = connection.CreateCommand();
             command.CommandText = "SELECT * FROM user where ApiKey = $ApiKey";
-            command.Parameters.AddWithValue("$ApiKey", ApiKey);
+            command.Parameters.AddWithValue("$ApiKey", X_API_KEY);
 
             if (!Request.Headers.ContainsKey("ApiKey"))
             {

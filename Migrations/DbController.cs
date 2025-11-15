@@ -12,21 +12,23 @@ namespace LatestEcommAPI.Migrations
 
             // Create user table
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS user (
+                CREATE TABLE IF NOT EXISTS users (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     email TEXT NOT NULL UNIQUE,
                     password VARCHAR NOT NULL,
-                    ApiKey TEXT,
+                    X_API_KEY TEXT,
                     name TEXT NOT NULL
                 );
             """);
 
             // Create product table
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS product (
+                CREATE TABLE IF NOT EXISTS products (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     name TEXT NOT NULL,
-                    price REAL NOT NULL
+                    price REAL NOT NULL,
+                    user_id INTEGER NOT NULL,
+                    FOREIGN KEY(user_id) REFERENCES user(id) ON DELETE CASCADE
                 );
             """);
 
@@ -46,7 +48,7 @@ namespace LatestEcommAPI.Migrations
             """);
 
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS order_item (
+                CREATE TABLE IF NOT EXISTS order_items (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     order_id INTEGER NOT NULL,
                     product_id INTEGER NOT NULL,
@@ -67,7 +69,7 @@ namespace LatestEcommAPI.Migrations
             """);
 
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS address (
+                CREATE TABLE IF NOT EXISTS addresses (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     user_id INTEGER NOT NULL,
                     street TEXT NOT NULL,
@@ -89,7 +91,7 @@ namespace LatestEcommAPI.Migrations
             """);
 
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS cart_item (
+                CREATE TABLE IF NOT EXISTS cart_items (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     cart_id INTEGER NOT NULL,
                     product_id INTEGER NOT NULL,
