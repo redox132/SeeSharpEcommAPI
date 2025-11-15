@@ -14,3 +14,7 @@ Content-Type: application/json
   "Postcode": "18320",
   "Country": "France"
 }
+
+### get order items for user with ID 1
+GET http://localhost:5089/api/orders
+# Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InJpZGFlbGtvdXJpQGdtYWlsLmNvbSIsIm5iZiI6MTc2MzE0MjM4MCwiZXhwIjoxNzYzMTQ1OTgwLCJpYXQiOjE3NjMxNDIzODB9.3Jacgz1lGKPmABJp2gMh4ztAK5WiuxtCwcqDX59dVeI

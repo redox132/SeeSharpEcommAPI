@@ -79,10 +79,11 @@ namespace LatestEcommAPI.Migrations
             """);
 
             ExecuteCommand(connection, """
-                CREATE TABLE IF NOT EXISTS cart (
+                CREATE TABLE IF NOT EXISTS supported_countries (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
-                    user_id INTEGER NOT NULL,
-                    FOREIGN KEY(user_id) REFERENCES user(id)
+                    country_code TEXT NOT NULL UNIQUE,  
+                    country_name TEXT NOT NULL,  
+                    is_active INTEGER NOT NULL DEFAULT 1
                 );
             """);
 
@@ -99,10 +100,10 @@ namespace LatestEcommAPI.Migrations
 
 
             ExecuteCommand(connection, """
-            CREATE TABLE IF NOT EXISTS Shipper (
+            CREATE TABLE IF NOT EXISTS carriers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 name TEXT NOT NULL,
-                phone TEXT NOT NULL
+                is_active INTEGER NOT NULL DEFAULT 1
             );
             """);
 

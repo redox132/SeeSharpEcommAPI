@@ -9,7 +9,7 @@ using System.Text.Json;
 namespace LatestEcommAPI.Controllers
 {
     [ApiController]
-    [Route("api/[controller]")]
+    [Route("api/orders")]
     public class OrderController : ControllerBase
     {
         [HttpGet("{id}/items")]
@@ -88,6 +88,36 @@ namespace LatestEcommAPI.Controllers
             }
 
             return Ok(new { message = "OK", orders });
+        }
+
+        [HttpGet]
+        // [Authorize]
+        public async Task<IActionResult> GetALlOrders(int id)
+        {
+            using (var connection = new SqliteConnection("Data source=Data/db.db"))
+            {
+                await connection.OpenAsync();
+
+                var command = connection.CreateCommand();
+                var res = command.CommandText = "SELECT * from orders";
+
+                var orders = new List<object>();
+
+                using (var reader = await command.ExecuteReaderAsync())
+                {
+                    while (await reader.ReadAsync())
+                    {
+                        var order = new
+                        {
+                            OrderId = reader.GetInt32(0),
+                            ProductID = reader.GetInt32(1),
+                            ShipperId = reader.GetInt32(2)
+                        };
+                        orders.Add(order);
+                    }
+                }
+                return Ok(new { message = "This has been OK", orders});
+            }
         }
     }
 }
